@@ -48,11 +48,16 @@
     "build:production": "make PRODUCTION=1",
     "webpack": "webpack-cli",
     "serve": "webpack-dev-server",
+    "sttdev": "GOOGLE_APPLICATION_CREDENTIALS=./dist/service-account.json node src/server/server-dev.js",
     "clean": "make clean"
   },
   "dependencies": {
     "detect-browser": "^4.1.0",
-    "event-target-shim": "^3.0.2"
+    "event-target-shim": "^3.0.2",
+    "@google-cloud/speech": "^3.2.2",
+    "into-stream": "^5.1.0",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
