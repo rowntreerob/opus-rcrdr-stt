@@ -1,3 +1,24 @@
+# opus-rcrdr-stt
+### adds Speech Recognition feature to opus recorder
+starting with a cloned project (opus media recorder), 2 new components enable real time continuous speech recognition. In original project example,  as you
+speak into the microphone, your words appear in the UI. Project components, adds an express Server.
+This new component receives encoded ( opus ) speech on 1 second intervals, sending that encoded voice on to Google Cloud speech.
+
+Note:  that you must select "ogg/opus" and 1 second intervals on the existing UI
+in order to conform to acceptable format for Google STT API.
+
+Interim and final results from the google recognizer appear in both server side Console
+and in the client
+
+##Build and run
+
+1. npm install
+2. make clean
+3. npm run build
+4. npm run sttdev  in a term window
+5. npm run serve      term window #2
+6. select recording details shown in photo
+
 # opus-media-recorder
 
 [Try it!](https://kbumsik.io/opus-media-recorder/)
