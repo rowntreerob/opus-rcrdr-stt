@@ -69,10 +69,10 @@ io.on('connection', function (client) {
     });
 
     client.on('binaryData', function (data) {
-         console.log('data ' + data.data.length + ' ' +typeof data.data); //log binary data
+         console.log('data ' + data.length + ' ' +typeof data); //log binary data
         if (recognizeStream !== null) {
           console.log('toSTRM')
-            recognizeStream.write(data.data);
+            recognizeStream.write(data);
         }
     });
 

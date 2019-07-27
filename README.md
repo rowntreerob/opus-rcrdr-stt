@@ -10,7 +10,7 @@ in order to conform to acceptable format for Google STT API.
 Interim and final results from the google recognizer appear in both server side Console
 and in the client
 
-##Build and run
+## Build and run
 
 1. npm install
 2. make clean

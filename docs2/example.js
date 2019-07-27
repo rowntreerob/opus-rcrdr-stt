@@ -56,7 +56,8 @@ buttonCreate.onclick = () => {
     .then(initButtons)
     .then(updateButtonState);
 };
-
+//retrn new mediarecorder and then call stream on interval
+//  call stream on it and pipe that to the back end
 function createMediaRecorder (stream) {
   // Create recorder object
   let options = { mimeType: mimeSelectValue };
@@ -74,7 +75,7 @@ function createMediaRecorder (stream) {
   recorder.ondataavailable = (e) => {
     var newcp = e.data.slice(0);
     dataChunks.push(newcp);
-    socket.emit('binaryData',{data: e.data} ); // data.arrayBuffer()
+    socket.emit('binaryData', (e.data) ); // data.arrayBuffer()
     console.log('Recorder ONdata ' + newcp.length);
     updateButtonState();
   };
