@@ -21,7 +21,7 @@ let buttonStopTracks = document.querySelector('#buttonStopTracks'); // For debug
 // User-selectable option
 let mimeSelect = document.querySelector('#mimeSelect');
 let defaultMime = document.querySelector('#defaultMime');
-let mimeSelectValue = '';
+let mimeSelectValue = 'audio/ogg';
 mimeSelect.onchange = (e) => { mimeSelectValue = e.target.value; };
 let timeSlice = document.querySelector('#timeSlice');
 // Player
@@ -73,10 +73,12 @@ function createMediaRecorder (stream) {
     updateButtonState();
   };
   recorder.ondataavailable = (e) => {
+    console.log('Recorder ONdata ' + e.data.size);
+
     var newcp = e.data.slice(0);
     dataChunks.push(newcp);
     socket.emit('binaryData', (e.data) ); // data.arrayBuffer()
-    console.log('Recorder ONdata ' + newcp.length);
+
     updateButtonState();
   };
   recorder.onstop = (e) => {
@@ -158,7 +160,7 @@ window.addEventListener('load', function checkPlatform () {
   let tmpRec = new MediaRecorder(
     getStream(new Audio('https://kbumsik.io/opus-media-recorder/sample.mp3')),
     {}, workerOptions);
-  defaultMime.innerHTML = `default: ${tmpRec.mimeType} (Browser dependant)`;
+  defaultMime.innerHTML = `audio/ogg`;
 }, false);
 
 // Update state of buttons when any buttons clicked
