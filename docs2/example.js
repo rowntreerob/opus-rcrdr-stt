@@ -31,6 +31,7 @@ let link = document.querySelector('#link');
 let status = document.querySelector('#status');
 const socket = io('http://localhost:5000');
 let streamStreaming = false;
+let fbname;
 
 // This creates a MediaRecorder object
 buttonCreate.onclick = () => {
@@ -86,13 +87,26 @@ function createMediaRecorder (stream) {
     let blob = new Blob(dataChunks, {'type': recorder.mimeType});
     dataChunks = [];
     let audioURL = URL.createObjectURL(blob);
-    player.src = audioURL;
-    link.href = audioURL;
+
+    // fireBase upld audio/ogg fm Recorder
+    // https localhost 5000 'audio/upload' type='audio/ogg'
+    var upldUrl = '//localhost:5883/audio/upload';
+    var type = 'audio/ogg';
+
+    audioUpld(upldUrl, blob, type).then(filLink =>{
+      console.log('downld audio ' + filLink);
+    }).catch(err => {
+       alert('file to Firebse : ' +err.message)
+     }
+    );
+
+  //  player.src = audioURL;
+  //  link.href = audioURL;
     let extension = recorder.mimeType.match(/ogg/) ? '.ogg'
                   : recorder.mimeType.match(/webm/) ? '.webm'
                   : recorder.mimeType.match(/wav/) ? '.wav'
                   : '';
-    link.download = 'recording' + extension;
+  //  link.download = 'recording' + extension;
     setTimeout(function () {
       socket.emit('endGoogleCloudStream', '');
       streamStreaming = false;
@@ -117,6 +131,49 @@ function initButtons () {
     recorder.stream.getTracks().forEach(i => i.stop());
     console.log('Tracks (stream) stopped. click \'Create\' button to capture stream.');
   };
+}
+
+function upddblink(name, speechtxt) {
+    var url = '//localhost:5883/media/link';
+    var mbdy = {speechText: speechtxt, name: name }
+    return fetch(url, { // Your POST endpoint
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      //  'Content-Length': blob.size,
+      //  'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify(mbdy)
+    }).then(
+      response => response.json()
+      .then( message => {
+        console.log('uploadLNK ' + JSON.stringify(message))
+      })
+    )
+}
+
+// fireBase upld audio/ogg fm Recorder
+// https localhost 5000 'audio/upload' type='audio/ogg'
+function audioUpld(url, blob, mime) {
+   var type = blob.type === undefined ? mime : blob.type;
+  return fetch(url, { // Your POST endpoint
+    method: 'POST',
+  //   mode: 'no-cors',
+    headers: {
+      'Accept': 'audio/ogg',
+      'Content-Type': type
+    //  'Content-Length': blob.size,
+    //  'Access-Control-Allow-Origin': '*'
+    },
+    body: blob // This is the content of your file
+  }).then(
+    response => response.json()
+    .then( message => {
+      fbname = message.gcsName;
+      console.log('uploadAUD ' + JSON.stringify(message))
+    })
+  )
 }
 
 // Check platform
@@ -276,7 +333,7 @@ socket.on('connect', function (data) {
 socket.on('messages', function (data) {
   console.log(data);
 });
-//  <div id="bubblsp" is UI to set
+
 socket.on('speechData', function (data) {
   // console.log(data.results[0].alternatives[0].transcript);
   // var resultText = document.getElementById('bubblsp');
@@ -293,6 +350,7 @@ socket.on('speechData', function (data) {
     // ffmAudSpeech = data.results[0].alternatives[0].transcript
     console.log("Google Speech sent 'final' Sentence.");
     socket.close();
+    upddblink(fbname, resultText);
   }
 });
 

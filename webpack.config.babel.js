@@ -43,7 +43,9 @@ module.exports = {
     },
     watchOptions: {
       poll: false
-    }
-
+    },    
+        headers: {
+            'Access-Control-Allow-Origin': '*'
+        }
   }
 }
