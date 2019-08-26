@@ -29,7 +29,7 @@ let player = document.querySelector('#player');
 let link = document.querySelector('#link');
 // Sticky divs
 let status = document.querySelector('#status');
-const socket = io('http://localhost:5000');
+const socket = io('https://localhost:5883');
 let streamStreaming = false;
 let fbname;
 

@@ -3,16 +3,17 @@ const speech = require('@google-cloud/speech');
 const speechClient = new speech.SpeechClient();
 const uuidv4 = require('uuid/v4');// ⇨ '3a017fc5-4f50-4db9-b0ce-4547ba0a1bfd'
 const restify = require("restify");
+const fs = require('fs');
 var express = require('express');
 var app = express();
 const cors = require('cors');
-const server = require('http').createServer(app);
+const server = require('https').createServer({
+  cert: fs.readFileSync('/home/rob/keys/node/cert.pem'),
+  key: fs.readFileSync('/home/rob/keys/node/key.pem')},app);
 const io = require('socket.io')(server);
-const fs = require('fs');
 var recognizeStream;
 var corsOptions = {
   origin: '*'
-
 }
 app.use(cors(corsOptions));
 // app.use(express.static('dist'));
@@ -158,7 +159,7 @@ app.get('/index.html', (req, res) => {
 app.post("/media/link", [jsnParser, postRecSpeech]);
 app.post("/audio/upload", gcsAudio);
 // var url = 'http://localhost:8080/audio';
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5883
 
 server.listen(PORT, function() {
     console.log('api running http://localhost:' + PORT  +' ' +__dirname);
