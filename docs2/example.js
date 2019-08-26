@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-// Non-standard options
+// Non-standard options review urls for webpack dev server
 const workerOptions = {
   OggOpusEncoderWasmPath: 'https://localhost:9000/OggOpusEncoder.wasm',
   WebMOpusEncoderWasmPath: 'https://localhost:9000/WebMOpusEncoder.wasm'
@@ -29,6 +29,7 @@ let player = document.querySelector('#player');
 let link = document.querySelector('#link');
 // Sticky divs
 let status = document.querySelector('#status');
+// url where npm 'sttdev' is running . this is the express process
 const socket = io('https://localhost:5883');
 let streamStreaming = false;
 let fbname;

@@ -1,14 +1,24 @@
 # opus-rcrdr-stt
 ### adds Speech Recognition feature to opus recorder
-starting with a cloned project (opus media recorder), 2 new components enable real time continuous speech recognition. In original project example,  as you
-speak into the microphone, your words appear in the UI. Project components, adds an express Server.
+this clones another project (opus media recorder), adding new components / features for the following:
+
+1. real time continuous speech recognition - text to speech in the UI during recording
+2. store audio file on cloud storage ( GCS ) - file sink for recording
+3. Firebase DB to store links to the above ( speech to text result, audio file URL)
+
+ Project components:
+
+New project adds an express Server - 'sttdev' in package.json.
 This new component receives encoded ( opus ) speech on 1 second intervals, sending that encoded voice on to Google Cloud speech.
 
 Note:  that you must select "ogg/opus" and 1 second intervals on the existing UI
 in order to conform to acceptable format for Google STT API.
 
 Interim and final results from the google recognizer appear in both server side Console
-and in the client
+and in the client.
+
+Google Cloud Storage bucket/filename appears in console and can be used to get media URL.
+Console also lists the tuple ( STT result, GCSname ) inserted to Firebase DB. 
 
 ## Build and run
 

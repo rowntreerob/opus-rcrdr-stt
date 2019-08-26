@@ -19,7 +19,8 @@ app.use(cors(corsOptions));
 // app.use(express.static('dist'));
 // add Firebase props-- NOT for git
 const serviceAccount = require('../../dist/service-account.json');
-const fbBucketBase = "workbox-demos-1b95f";
+//TODO  the base name for your firebase project. change below
+const fbBucketBase = "workbox-demo-xxxxx";
 const _bucket = fbBucketBase + '.appspot.com';
 const _dburl = 'https://' + fbBucketBase + '.firebaseio.com';
 const admin = require("firebase-admin");
