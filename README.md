@@ -11,25 +11,27 @@ this clones another project (opus media recorder), adding new components / featu
 New project adds an express Server - 'sttdev' in package.json.
 This new component receives encoded ( opus ) speech on 1 second intervals, sending that encoded voice on to Google Cloud speech.
 
-Note:  that you must select "ogg/opus" and 1 second intervals on the existing UI
-in order to conform to acceptable format for Google STT API.
-
 Interim and final results from the google recognizer appear in both server side Console
 and in the client.
 
 Google Cloud Storage bucket/filename appears in console and can be used to get media URL.
-Console also lists the tuple ( STT result, GCSname ) inserted to Firebase DB. 
+Console also lists the tuple ( STT result, GCSname ) inserted to Firebase DB.
 
 ## Build and run
+Firebase dependency - take care of project create, billing, bucket.name per FB docs.
+Includes downloads and node.js stuff at  [add sdk , init sdk](https://firebase.google.com/docs/admin/setup)
 
-1. npm install
-2. make clean
-3. npm run build
-4. npm run sttdev  in a term window
-5. npm run serve      term window #2
-6. select recording details shown in photo
+1. cp service-account.json to dist folder
+2. chg code in server-dev.js to match firebase.bucket.name
+3. npm install
+4. make clean
+5. source $EMSDK_HOME/emsdk_env.sh - setting ENV for native builds on opus/ogg
+6. npm run build
+7. npm run sttdev  in a term window
+8. npm run serve      term window #2
+9. in browser request https://localhost:9000/index2.html
 
-# opus-media-recorder
+# opus-media-recorder - cloned project, details on native build (emsdk, Emscripten)
 
 [Try it!](https://kbumsik.io/opus-media-recorder/)
 
