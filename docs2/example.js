@@ -1,4 +1,9 @@
 import io from 'socket.io-client';
+import {MDCRipple} from '@material/ripple/index';
+const ripple = new MDCRipple(document.querySelector('.rrbutton'));
+ripple.unbounded = true;
+// import "../button.css"
+// import "@material/icon-button/mdc-icon-button";
 
 // Non-standard options review urls for webpack dev server
 const workerOptions = {
@@ -14,16 +19,17 @@ let recorder;
 // Buttons
 let buttonCreate = document.querySelector('#buttonCreate');
 let buttonStart = document.querySelector('#buttonStart');
-let buttonPause = document.querySelector('#buttonPause');
-let buttonResume = document.querySelector('#buttonResume');
-let buttonStop = document.querySelector('#buttonStop');
-let buttonStopTracks = document.querySelector('#buttonStopTracks'); // For debugging purpose
+//let buttonPause = document.querySelector('#buttonPause');
+//let buttonResume = document.querySelector('#buttonResume');
+//let buttonStop = document.querySelector('#buttonStop');
+//let buttonStopTracks = document.querySelector('#buttonStopTracks'); // For debugging purpose
 // User-selectable option
 let mimeSelect = document.querySelector('#mimeSelect');
-let defaultMime = document.querySelector('#defaultMime');
+let butText = document.querySelector('#butText');
+// let defaultMime = document.querySelector('#defaultMime');
 let mimeSelectValue = 'audio/ogg';
-mimeSelect.onchange = (e) => { mimeSelectValue = e.target.value; };
-let timeSlice = document.querySelector('#timeSlice');
+// mimeSelect.onchange = (e) => { mimeSelectValue = e.target.value; };
+// let timeSlice = document.querySelector('#timeSlice');
 // Player
 let player = document.querySelector('#player');
 let link = document.querySelector('#link');
@@ -35,6 +41,7 @@ let streamStreaming = false;
 let fbname;
 
 // This creates a MediaRecorder object
+// context obj for webaudio api in response to a click
 buttonCreate.onclick = () => {
   navigator.mediaDevices.getUserMedia({  audio: {
   	sampleRate: 16000,
@@ -64,7 +71,6 @@ function createMediaRecorder (stream) {
   // Create recorder object
   let options = { mimeType: mimeSelectValue };
   recorder = new MediaRecorder(stream, options, workerOptions);
-
   let dataChunks = [];
   // Recorder Event Handlers
   recorder.onstart = _ => {
@@ -76,24 +82,19 @@ function createMediaRecorder (stream) {
   };
   recorder.ondataavailable = (e) => {
     console.log('Recorder ONdata ' + e.data.size);
-
     var newcp = e.data.slice(0);
     dataChunks.push(newcp);
     socket.emit('binaryData', (e.data) ); // data.arrayBuffer()
-
-    updateButtonState();
+  //  updateButtonState();
   };
   recorder.onstop = (e) => {
     // When stopped add a link to the player and the download link
     let blob = new Blob(dataChunks, {'type': recorder.mimeType});
     dataChunks = [];
     let audioURL = URL.createObjectURL(blob);
-
     // fireBase upld audio/ogg fm Recorder
-    // https localhost 5000 'audio/upload' type='audio/ogg'
     var upldUrl = '//localhost:5883/audio/upload';
     var type = 'audio/ogg';
-
     audioUpld(upldUrl, blob, type).then(filLink =>{
       console.log('downld audio ' + filLink);
     }).catch(err => {
@@ -101,8 +102,8 @@ function createMediaRecorder (stream) {
      }
     );
 
-  //  player.src = audioURL;
-  //  link.href = audioURL;
+    player.src = audioURL;
+    link.href = audioURL;
     let extension = recorder.mimeType.match(/ogg/) ? '.ogg'
                   : recorder.mimeType.match(/webm/) ? '.webm'
                   : recorder.mimeType.match(/wav/) ? '.wav'
@@ -115,23 +116,23 @@ function createMediaRecorder (stream) {
     console.log('Recorder stopped');
     updateButtonState();
   };
-  recorder.onpause = _ => console.log('Recorder paused');
-  recorder.onresume = _ => console.log('Recorder resumed');
+  //recorder.onpause = _ => console.log('Recorder paused');
+  //recorder.onresume = _ => console.log('Recorder resumed');
   recorder.onerror = e => console.log('Recorder encounters error:' + e.message);
-
   return stream;
 };
 
 function initButtons () {
-  buttonStart.onclick = _ => recorder.start(timeSlice.value);
-  buttonPause.onclick = _ => recorder.pause();
-  buttonResume.onclick = _ => recorder.resume();
-  buttonStop.onclick = _ => recorder.stop();
-  buttonStopTracks.onclick = _ => {
+    buttonStart.onclick = _ => handleRec(recorder.state, 1000);
+//  buttonStart.onclick = _ => recorder.start(timeSlice.value);
+//  buttonPause.onclick = _ => recorder.pause();
+//  buttonResume.onclick = _ => recorder.resume();
+//  buttonStop.onclick = _ => recorder.stop();
+//  buttonStopTracks.onclick = _ => {
     // stop all tracks (this will delete a mic icon from a browser tab
-    recorder.stream.getTracks().forEach(i => i.stop());
-    console.log('Tracks (stream) stopped. click \'Create\' button to capture stream.');
-  };
+  //  recorder.stream.getTracks().forEach(i => i.stop());
+  //  console.log('Tracks (stream) stopped. click \'Create\' button to capture stream.');
+//  };
 }
 
 function upddblink(name, speechtxt) {
@@ -218,40 +219,49 @@ window.addEventListener('load', function checkPlatform () {
   let tmpRec = new MediaRecorder(
     getStream(new Audio('https://kbumsik.io/opus-media-recorder/sample.mp3')),
     {}, workerOptions);
-  defaultMime.innerHTML = `audio/ogg`;
+  // defaultMime.innerHTML = `audio/ogg`;
 }, false);
+// inactive or recording
+// = _ => recorder.start(timeSlice.value);
+function handleRec (state, interval) {
+  console.log('HNDL ' + state)
+  switch (state) {
+    case 'inactive':
+      recorder.start(interval);
+      document.getElementById("lbl1").innerHTML = "STOP";
+  //    butText.innerHTML = 'STOP'
+      break;
+    case 'recording':
+      recorder.stop();
+      break;
+      default:
+      break;
+    }
+  }
 
 // Update state of buttons when any buttons clicked
 function updateButtonState () {
+  console.log('ST ' + recorder.state)
   switch (recorder.state) {
     case 'inactive':
       buttonCreate.disabled = false;
       buttonStart.disabled = false;
-      buttonPause.disabled = true;
-      buttonResume.disabled = true;
-      buttonStop.disabled = true;
-      buttonStopTracks.disabled = false; // For debugging purpose
+  //    buttonPause.disabled = true;
+  //    buttonResume.disabled = true;
+  //    buttonStop.disabled = true;
+  //    buttonStopTracks.disabled = false; // For debugging purpose
       status.innerHTML =
         link.href ? 'Recording complete. You can play or download the recording below.'
                   : 'Stream created. Click "start" button to start recording.';
       break;
     case 'recording':
       buttonCreate.disabled = true;
-      buttonStart.disabled = true;
-      buttonPause.disabled = false;
-      buttonResume.disabled = false;
-      buttonStop.disabled = false;
-      buttonStopTracks.disabled = false; // For debugging purpose
+      buttonStart.disabled = false;
+//      buttonPause.disabled = false;
+//      buttonResume.disabled = false;
+//      buttonStop.disabled = false;
+//      buttonStopTracks.disabled = false; // For debugging purpose
       status.innerHTML = 'Recording. Click "stop" button to play recording.';
-      break;
-    case 'paused':
-      buttonCreate.disabled = true;
-      buttonStart.disabled = true;
-      buttonPause.disabled = true;
-      buttonResume.disabled = false;
-      buttonStop.disabled = false;
-      buttonStopTracks.disabled = false; // For debugging purpose
-      status.innerHTML = 'Paused. Click "resume" button.';
       break;
     default:
       // Maybe recorder is not initialized yet so just ingnore it.

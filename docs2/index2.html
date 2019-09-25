@@ -1,0 +1,121 @@
+<html>
+  <head>
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+    </script>
+
+    <!-- For mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>opus-media-recorder Example</title>
+    <link href="main.css" rel="stylesheet">
+  <!--  <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+    <style>
+    </style>
+  </head>
+
+  <body>
+    <!-- Fork me on Github! Thanks tholman: https://github.com/tholman/github-corners -->
+
+    <header>
+      <h2>
+        Opus  Example
+      </h2>
+    </header>
+
+    <!-- Description -->
+    <section class="description">
+      <p>
+        <code>opus-media-recorder</code> is a
+        <a href="https://w3c.github.io/mediacapture-record/#mediarecorder-api"
+            rel="nofollow">MediaRecorder API</a>
+
+      </p>
+
+    </section>
+
+
+    <!-- Voice recording example control -->
+    <section id="voiceRecording" class="controller card">
+        <header>
+          <h3>Voice recording</h3>
+        </header>
+        <!-- MediaRecorder status indicator -->
+        <div class="status">
+          <span id="status">Stream not created. Click "create" button.</span>
+        </div>
+<!--
+        <div class="buttons">
+          <button id="buttonCreate">create</button>
+          <button id="buttonStart" disabled>start</button>
+          <button id="buttonPause" disabled>pause</button>
+          <button id="buttonResume" disabled>resume</button>
+          <button id="buttonStop" disabled>stop</button>
+
+          <button id="buttonStopTracks" disabled hidden>stop tracks</button>
+        </div>
+  -->
+<div class="buttons">
+  <button id="buttonCreate" class="mdc-button rrbutton material-icons">create</button>
+  <button id="buttonStart" class="mdc-button rrbutton material-icons" >
+    <i class="material-icons mdc-button__icon"  aria-hidden="false">mic</i>
+    <label id="lbl1" for="female">START</label>
+
+          </button>
+</div>
+    </section>
+
+    <!-- Media recording example control -->
+    <section id="mediaRecording" class="controller card" disabled hidden>
+
+    </section>
+
+    <!-- Recording player -->
+    <section class="player card">
+        <header>
+          <h3>Recording player</h3>
+        </header>
+        <div><audio id="player" controls></audio></div>
+        <div><a id="link">Download Link</a></div>
+        <div class="note">
+          <p>
+            Note: Some browsers (e.g. Safari and old Edge) do not support Ogg/WebM
+            playback on the browser. In this case you should download the
+            recording and play it using a supported media player (e.g. VLC Player)
+          </p>
+          <p>
+            Note: Microphone recording will not work on third-party browsers of
+            iOS like Chrome for iOS. See issue
+            <a href="https://github.com/kbumsik/opus-media-recorder/issues/1"
+              >#1</a
+            >.
+          </p>
+        </div>
+    </section>
+
+    <section class="console card">
+      <header>
+        <h3>Console</h3>
+      </header>
+      <!-- Log will be printed here -->
+      <div id="errorLog" class="log"></div>
+    </section>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/opus-media-recorder@latest/OpusMediaRecorder.umd.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/opus-media-recorder@latest/encoderWorker.umd.js"></script> -->
+    <!-- OR -->
+    <!-- <script src="OpusMediaRecorder.umd.js"></script> -->
+    <!-- <script src="encoderWorker.umd.js"></script> -->
+
+    <!-- <script src="example.js"></script> -->
+<script type="text/javascript" src="https://localhost:9000/OpusMediaRecorder.umd.js"></script>
+<script type="text/javascript" src="https://localhost:9000/encoderWorker.umd.js"></script>
+
+<script type="text/javascript" src="main.js"></script>
+  </body>
+</html>

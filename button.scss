@@ -1,0 +1,39 @@
+// Import your theme variables
+@import "scss/my-theme";
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+// Import MDC Web components
+@import "~@material/typography/mdc-typography";
+@import "~@material/icon-button/mdc-icon-button";
+
+
+// Import your components for your application
+@import "scss/my-components";
+
+.mdc-button__icon {
+  display: inline-flex;
+
+  font-size: 16px;
+  vertical-align: middle;
+  margin-right: 2px;
+}
+
+.buttons {
+  margin: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+
+    display: flex;
+    height: 62px;
+    border: 1px solid red;
+
+}
+
+.log {
+  font-family: monospace;
+  text-align: left;
+  white-space: pre;
+  overflow-x: auto;
+  font-size: 12px;
+}

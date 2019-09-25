@@ -20,7 +20,7 @@ app.use(cors(corsOptions));
 // add Firebase props-- NOT for git
 const serviceAccount = require('../../dist/service-account.json');
 //TODO  the base name for your firebase project. change below
-const fbBucketBase = "workbox-demo-xxxxx";
+const fbBucketBase = "workbox-demos-*****";
 const _bucket = fbBucketBase + '.appspot.com';
 const _dburl = 'https://' + fbBucketBase + '.firebaseio.com';
 const admin = require("firebase-admin");
@@ -128,9 +128,10 @@ io.on('connection', function (client) {
 
 // raw body parser for ogg file or just pipe the req
 const gcsAudio = (req, res) => {
-  console.log('onGcsAudio call')
+
   const type = req.get('Content-Type');
   let gcsname = 'audio/' +uuidv4() + '.opus';
+  console.log('onGcsAudio call ' + myBucket + ' ' + gcsname)
   const files = myBucket.file(gcsname);
   const stream = files.createWriteStream({
     metadata: {
@@ -142,7 +143,8 @@ const gcsAudio = (req, res) => {
  req
    .pipe(stream)
    .on("error", (err) => {
-     restify.InternalServerError(err);
+     //restify.InternalServerError(err);
+     console.log('ERR ' +JSON.stringify(err))
    })
    .on('finish', () => {
      res.json({
